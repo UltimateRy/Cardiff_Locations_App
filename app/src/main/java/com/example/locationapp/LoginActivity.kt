@@ -95,6 +95,10 @@ class LoginActivity : AppCompatActivity() {
         if (currentEmail !== null) {
             //They are already logged in and we can go to the home page
             txtGreeting.text = "Welcome " + mAuth.currentUser?.email.toString() + "!"
+
+            val newIntent = Intent(this, HomeActivity::class.java)
+            startActivity(newIntent)
+
         } else {
             //We are not logged in and we should now be at the login screen
             txtGreeting.text == ""
