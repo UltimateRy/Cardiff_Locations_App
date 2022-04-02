@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:title="Refresh"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="ifRoom"
+        ></item>
+
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_account"
+        app:showAsAction="ifRoom"
+        ></item>
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        ></item>
+
+    <item
+        android:id="@+id/action_about"
+        android:title="About"
+        ></item>
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout"
+        ></item>
+
+</menu>

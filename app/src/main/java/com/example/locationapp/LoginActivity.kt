@@ -53,7 +53,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         update()
     }
 
@@ -95,7 +94,9 @@ class LoginActivity : AppCompatActivity() {
 
         if (currentEmail !== null) {
             //They are already logged in and we can go to the home page
-            txtGreeting.text = "Welcome " + mAuth.currentUser?.email.toString() + "!"
+            //txtGreeting.text = "Welcome " + mAuth.currentUser?.email.toString() + "!"
+
+            txtGreeting.text = ""
 
             val newIntent = Intent(this, HomeActivity::class.java)
             startActivity(newIntent)
