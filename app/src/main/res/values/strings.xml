@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LocationApp</string>
+
+    <string-array name="tabTitles">
+        <item> Discover </item>
+        <item> Locations </item>
+        <item> Favourites </item>
+    </string-array>
+
 </resources>

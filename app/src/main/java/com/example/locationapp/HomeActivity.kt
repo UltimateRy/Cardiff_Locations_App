@@ -7,7 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toolbar
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 
 class HomeActivity : AppCompatActivity() {
@@ -17,6 +20,22 @@ class HomeActivity : AppCompatActivity() {
 
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_toolbar)
         setSupportActionBar(myToolbar)
+
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager = findViewById<ViewPager2>(R.id.pager)
+
+        viewPager.setUserInputEnabled(false)
+
+        val tabTitles = resources.getStringArray(R.array.tabTitles)
+        viewPager.adapter = TabAdapter(this)
+        TabLayoutMediator(tabLayout, viewPager)
+        { tab, position ->
+            when (position) {
+                0 -> tab.text = tabTitles[0]
+                1 -> tab.text = tabTitles[1]
+                2 -> tab.text = tabTitles[2]
+            }
+        }.attach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
