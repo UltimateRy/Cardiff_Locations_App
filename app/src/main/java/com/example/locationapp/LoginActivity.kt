@@ -47,11 +47,13 @@ class LoginActivity : AppCompatActivity() {
             startActivity(newIntent)
         }
 
+        mAuth.signOut()
+        update()
     }
 
     override fun onStart() {
         super.onStart()
-        mAuth.signOut()
+
         update()
     }
 
@@ -65,8 +67,7 @@ class LoginActivity : AppCompatActivity() {
             txtGreeting.text = "Error : Please input a valid password"
         } else {
 
-            //Check credentials here
-
+            //Check credentials
             mAuth.signInWithEmailAndPassword(
                 txtEmail.text.toString(),
                 txtPassword.text.toString()
@@ -98,9 +99,10 @@ class LoginActivity : AppCompatActivity() {
 
             val newIntent = Intent(this, HomeActivity::class.java)
             startActivity(newIntent)
+            finish()
 
         } else {
-            //We are not logged in and we should now be at the login screen
+            //We are not logged in and we should be at the login screen
             txtGreeting.text == ""
         }
     }
