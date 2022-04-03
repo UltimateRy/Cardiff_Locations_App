@@ -8,12 +8,22 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toolbar
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 
+
+
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var mMap : GoogleMap
+
+    //private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
