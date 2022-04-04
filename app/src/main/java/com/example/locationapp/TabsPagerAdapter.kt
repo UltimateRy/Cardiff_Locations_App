@@ -11,7 +11,7 @@ class TabAdapter (activity: AppCompatActivity) : FragmentStateAdapter(activity) 
     override fun createFragment(index: Int): Fragment {
         when (index) {
             0 -> return MapFragment()
-            1 -> return MapFragment()
+            1 -> return LocationsFragment()
             2 -> return MapFragment()
         }
         return MapFragment()

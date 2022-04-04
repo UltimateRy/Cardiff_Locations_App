@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import android.location.LocationManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MapFragment : Fragment() {
 
@@ -49,6 +50,10 @@ class MapFragment : Fragment() {
             mMap.addMarker(marker)
         }
 
+
+
+
+
         toCoFo()
     }
 
@@ -77,5 +82,20 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+
+        view.findViewById<FloatingActionButton>(R.id.locFab).setOnClickListener() {
+            val sydney = LatLng(-34.0, 151.0)
+            //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        }
+
+        view.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener() {
+            mMap.animateCamera(CameraUpdateFactory.zoomIn())
+        }
+
+        view.findViewById<FloatingActionButton>(R.id.removeFAB).setOnClickListener() {
+            mMap.animateCamera(CameraUpdateFactory.zoomOut())
+        }
+
     }
 }

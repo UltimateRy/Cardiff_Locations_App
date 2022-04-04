@@ -47,5 +47,6 @@ tools:context=".MapFragment">
         app:srcCompat="@drawable/ic_my_location" />
 
 
+
 </FrameLayout>
 
