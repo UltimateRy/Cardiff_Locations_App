@@ -12,7 +12,7 @@ class TabAdapter (activity: AppCompatActivity) : FragmentStateAdapter(activity) 
         when (index) {
             0 -> return MapFragment()
             1 -> return LocationsFragment()
-            2 -> return MapFragment()
+            2 -> return FavouritesFragment()
         }
         return MapFragment()
     }
