@@ -11,10 +11,10 @@
         android:id="@+id/textInputUsername"
         android:layout_width="293dp"
         android:layout_height="59dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/textRegister">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditEmailRegister"
@@ -59,26 +59,53 @@
         android:id="@+id/btnRegister"
         android:layout_width="293dp"
         android:layout_height="58dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:text="REGISTER"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputPassword" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="293dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="32dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRegister">
+        app:layout_constraintTop_toBottomOf="@id/btnRegister">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Username" />
-    </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?  "
+            tools:layout_editor_absoluteX="105dp"
+            tools:layout_editor_absoluteY="551dp" />
+
+        <TextView
+            android:id="@+id/txtLoginAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="Login"
+            android:textColor="@color/purple_200"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="223dp"
+            tools:layout_editor_absoluteY="548dp" />
+
+        ></LinearLayout>
+
+    <TextView
+        android:id="@+id/txtGreetingRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputPassword" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

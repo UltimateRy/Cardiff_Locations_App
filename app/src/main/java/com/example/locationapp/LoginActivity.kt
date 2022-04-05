@@ -44,7 +44,10 @@ class LoginActivity : AppCompatActivity() {
 
         txtRegisterAccount.setOnClickListener() {
             val newIntent = Intent(this, RegisterActivity::class.java)
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(newIntent)
+            finish()
         }
 
         mAuth.signOut()
@@ -99,6 +102,8 @@ class LoginActivity : AppCompatActivity() {
             txtGreeting.text = ""
 
             val newIntent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("user_id", FirebaseAuth.getInstance().currentUser!!.uid)
+            intent.putExtra("email_id", FirebaseAuth.getInstance().currentUser!!.uid)
             startActivity(newIntent)
             finish()
 
@@ -115,9 +120,4 @@ class LoginActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
-
-    private fun launchMainActivity (view: View) {
-        //val newIntent
-    }
-
 }

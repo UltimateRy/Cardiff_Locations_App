@@ -31,6 +31,8 @@ class MapFragment : Fragment() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var locationManager: LocationManager
 
+    //private lateinit var markers : new ConcurrentHashmap
+
     private val callback = OnMapReadyCallback { googleMap ->
         /**
          * Manipulates the map once available.
@@ -53,19 +55,20 @@ class MapFragment : Fragment() {
                 .title("New Marker Point")
             mMap.addMarker(marker)
         }
-        toCoFo()
+        toCardiff()
     }
 
     //direct the view to CoFo
-    private fun toCoFo() {
+    private fun toCardiff() {
         //co-ordinates for CoFo (pull out of Google Maps URL or right click the point)
-        val coFo = LatLng(51.619543, -3.878634)
-        mMap.addMarker(MarkerOptions().position(coFo)
-            .title("Computational Foundry"))
+        val cardiff = LatLng(51.48275351945997, -3.1688197915140925)
+        //mMap.addMarker(MarkerOptions().position(coFo)
+        //    .title("Welcome to Cardiff"))
         //map appears as though under a `camera'
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(coFo))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(12F))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(cardiff))
         //zoom level from 1--20 as float
-        //mMap.moveCamera(CameraUpdateFactory.zoomTo(18F))
+
     }
 
     override fun onAttach(context: Context) {
@@ -103,12 +106,10 @@ class MapFragment : Fragment() {
                     val long = location.longitude
 
                     Log.i("LocLatLocation", "$lat and $long")
-
                     val lastLoc = LatLng(lat, long)
 
                     //update camera
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(lastLoc))
-
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc))
 
                     var hue : Float = 120F;
@@ -117,15 +118,6 @@ class MapFragment : Fragment() {
                     mMap.addMarker(MarkerOptions().position(lastLoc)
                         .title("Current Location")
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))
-
-                    /*
-                    mMap.addCircle(CircleOptions()
-                        .center(lastLoc)
-                        .radius(1000.0)
-                        .strokeColor(Color.WHITE)
-                        .fillColor(Color.BLUE))
-                    */
-
                 }
             }
             //couldn't get location, so go to Settings (deprecated??)
@@ -152,7 +144,6 @@ class MapFragment : Fragment() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             maxWaitTime= 100
         }
-
         // checking location permission
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -183,15 +174,12 @@ class MapFragment : Fragment() {
 
             val lastLoc = LatLng(lat, long)
             Log.i("LocLatLocationCallback", "$lat and $long")
-
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
     }
 
     override fun onCreateView(
@@ -208,12 +196,7 @@ class MapFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
 
         view.findViewById<FloatingActionButton>(R.id.locFab).setOnClickListener() {
-            //val sydney = LatLng(-34.0, 151.0)
-
-            //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
             getLastLocation()
-
-
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
 

@@ -22,11 +22,13 @@ class HomeActivity : AppCompatActivity() {
 
     //private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        val userId = intent.getStringExtra("user_id")
+        val emailId = intent.getStringExtra("email_id")
+
 
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_toolbar)
         setSupportActionBar(myToolbar)
