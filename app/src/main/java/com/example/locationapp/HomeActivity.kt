@@ -14,8 +14,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 
-
-
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var mMap : GoogleMap
@@ -26,9 +24,10 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+
+
         val userId = intent.getStringExtra("user_id")
         val emailId = intent.getStringExtra("email_id")
-
 
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_toolbar)
         setSupportActionBar(myToolbar)
@@ -36,7 +35,7 @@ class HomeActivity : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         val viewPager = findViewById<ViewPager2>(R.id.pager)
 
-        viewPager.setUserInputEnabled(false)
+        viewPager.isUserInputEnabled = false
 
         val tabTitles = resources.getStringArray(R.array.tabTitles)
         viewPager.adapter = TabAdapter(this)
@@ -48,6 +47,8 @@ class HomeActivity : AppCompatActivity() {
                 2 -> tab.text = tabTitles[2]
             }
         }.attach()
+
+        supportActionBar?.title = "Explore Cardiff!"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -90,5 +91,4 @@ class HomeActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

@@ -42,21 +42,37 @@ class MapFragment : Fragment() {
          * If Google Play services is not installed on the device, the user will be prompted to
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
+
          */
+
+        googleMap.uiSettings.setZoomControlsEnabled(true)
+
         val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         mMap = googleMap
 
+        /*
         mMap.setOnMapClickListener { point ->
             val marker = MarkerOptions()
                 .position(point)
                 .title("New Marker Point")
             mMap.addMarker(marker)
         }
+         */
+        populateMap()
+
         toCardiff()
+
+
+
     }
+
+    private fun populateMap() {
+
+    }
+
 
     //direct the view to CoFo
     private fun toCardiff() {
@@ -199,14 +215,5 @@ class MapFragment : Fragment() {
             getLastLocation()
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
-
-        view.findViewById<FloatingActionButton>(R.id.addFAB).setOnClickListener() {
-            mMap.animateCamera(CameraUpdateFactory.zoomIn())
-        }
-
-        view.findViewById<FloatingActionButton>(R.id.removeFAB).setOnClickListener() {
-            mMap.animateCamera(CameraUpdateFactory.zoomOut())
-        }
-
     }
 }
