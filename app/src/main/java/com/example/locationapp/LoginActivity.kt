@@ -63,6 +63,8 @@ class LoginActivity : AppCompatActivity() {
         val currentUser = mAuth.currentUser
         val currentEmail = currentUser?.email
 
+        btnLogin.isEnabled = false
+
         if (txtEmail.text.toString() == "") {
             txtGreeting.text = "Error : Please input a valid email address"
         } else if (txtPassword.text.toString() == "") {

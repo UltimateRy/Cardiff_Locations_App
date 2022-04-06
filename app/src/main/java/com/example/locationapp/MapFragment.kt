@@ -20,10 +20,12 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
+import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.ConcurrentHashMap
@@ -78,20 +80,99 @@ class MapFragment : Fragment() {
             mMap.addMarker(marker)
         }
          */
+
+        mMap.setOnMarkerClickListener {
+
+            Log.i("Marker Clicked: ", it.title.toString())
+
+            false
+        }
+
+        mMap.setOnInfoWindowClickListener {
+
+            Log.i("Info Window Clicked: ", it.title.toString())
+
+            false
+
+        }
+
+
         populateMap()
         toCardiff()
     }
 
     private fun populateMap() {
+
+        database.collection("landmarks").get()
+            .addOnSuccessListener { collection ->
+
+
+
+                for (item in collection) {
+                    Log.i("Name : ", item["Name"].toString())
+                    Log.i("Location : ", item["Location"].toString())
+
+
+                    var geoPoint : GeoPoint? = item.getGeoPoint("Location")
+                    var lat = geoPoint!!.latitude
+                    val long = geoPoint!!.longitude
+
+                    var latlng : LatLng = LatLng(lat, long)
+
+                    var hue : Float
+                    val name : String
+
+                    if (item["IsHidden"] == true) {
+                        hue = HUE_VIOLET
+                        name = "Hidden Location"
+                    } else {
+                        hue = HUE_AZURE
+                        name = item["Name"].toString()
+                    }
+
+                    markerHashMap[item["Name"].toString()] = mMap.addMarker(MarkerOptions()
+                        .position(latlng)
+                        .title(name)
+                        .icon(BitmapDescriptorFactory.defaultMarker(hue)))!!
+
+                    markerHashMap[item["Name"].toString()]!!.showInfoWindow()
+
+
 /*
-        database.collection("locations").get()
-            .addOnSuccessListener {
-                @Override
+                    latlng?.let {
+                        MarkerOptions().position(
+                            it
+                        ).title("Marker in Sydney")
+                    }?.let { mMap.addMarker(it) }!!
+*/
+                }
 
 
+
+            }.addOnFailureListener(OnFailureListener { e ->
+                    Log.i("Error", e.toString())
+            })
+
+        /*
+        database.collection("landmarks").addSnapshotListener(object : EventListener<QuerySnapshot> {
+            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+                if (error != null) {
+                    Log.i("Firebase Error", error.message.toString())
+                    return
+                }
+                for (dc : DocumentChange in value?.documentChanges!!) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+
+
+                    }
+                }
             }
 
- */
+        })
+
+         */
+
+
 
     }
 
