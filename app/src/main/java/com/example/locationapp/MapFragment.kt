@@ -4,9 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
@@ -16,14 +14,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.*
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.concurrent.ConcurrentHashMap
+
 
 class MapFragment : Fragment() {
 
@@ -31,7 +35,10 @@ class MapFragment : Fragment() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var locationManager: LocationManager
 
-    //private lateinit var markers : new ConcurrentHashmap
+    private var markerHashMap: ConcurrentHashMap<String, Marker> = ConcurrentHashMap()
+
+    private lateinit var newMarker : Marker
+    private var database = Firebase.firestore
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -45,13 +52,23 @@ class MapFragment : Fragment() {
 
          */
 
-        googleMap.uiSettings.setZoomControlsEnabled(true)
+        googleMap.uiSettings.isZoomControlsEnabled = true
 
         val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+
+
+        markerHashMap["Sydney"] = googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))!!
+
+        //newMarker = googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))!!
+         //   ?.let { markerHashMap.("Sydney", it) }
+
+
+       // markerHashMap["Sydney"] = newMarker
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
         mMap = googleMap
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json))
 
         /*
         mMap.setOnMapClickListener { point ->
@@ -62,14 +79,19 @@ class MapFragment : Fragment() {
         }
          */
         populateMap()
-
         toCardiff()
-
-
-
     }
 
     private fun populateMap() {
+/*
+        database.collection("locations").get()
+            .addOnSuccessListener {
+                @Override
+
+
+            }
+
+ */
 
     }
 
@@ -212,6 +234,7 @@ class MapFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
 
         view.findViewById<FloatingActionButton>(R.id.locFab).setOnClickListener() {
+            //markerHashMap["Sydney"]?.remove()
             getLastLocation()
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
