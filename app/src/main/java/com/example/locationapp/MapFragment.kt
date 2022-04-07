@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -56,138 +57,68 @@ class MapFragment : Fragment() {
 
         googleMap.uiSettings.isZoomControlsEnabled = true
 
+        /**
         val sydney = LatLng(-34.0, 151.0)
-
-
         markerHashMap["Sydney"] = googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))!!
-
-        //newMarker = googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))!!
-         //   ?.let { markerHashMap.("Sydney", it) }
-
-
-       // markerHashMap["Sydney"] = newMarker
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        **/
 
         mMap = googleMap
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json))
 
-        /*
-        mMap.setOnMapClickListener { point ->
-            val marker = MarkerOptions()
-                .position(point)
-                .title("New Marker Point")
-            mMap.addMarker(marker)
-        }
-         */
-
         mMap.setOnMarkerClickListener {
-
             Log.i("Marker Clicked: ", it.title.toString())
-
             false
         }
 
         mMap.setOnInfoWindowClickListener {
 
-            Log.i("Info Window Clicked: ", it.title.toString())
-
-            false
-
+           if (it.title == "Hidden Landmark") {
+               //Log.i("Landmark Clicked " , "This landmark is hidden")
+               displayMessage(requireView(), "This landmark is hidden")
+           } else {
+               val newIntent = Intent(requireActivity(), LandmarkActivity::class.java)
+               newIntent.putExtra("landmark_id", it.title.toString())
+               startActivity(newIntent)
+               false
+           }
         }
-
 
         populateMap()
         toCardiff()
     }
 
     private fun populateMap() {
-
         database.collection("landmarks").get()
             .addOnSuccessListener { collection ->
-
-
-
                 for (item in collection) {
-                    Log.i("Name : ", item["Name"].toString())
-                    Log.i("Location : ", item["Location"].toString())
-
-
                     var geoPoint : GeoPoint? = item.getGeoPoint("Location")
-                    var lat = geoPoint!!.latitude
+                    val lat = geoPoint!!.latitude
                     val long = geoPoint!!.longitude
-
                     var latlng : LatLng = LatLng(lat, long)
-
                     var hue : Float
                     val name : String
-
                     if (item["IsHidden"] == true) {
                         hue = HUE_VIOLET
-                        name = "Hidden Location"
+                        name = "Hidden Landmark"
                     } else {
                         hue = HUE_AZURE
                         name = item["Name"].toString()
                     }
-
                     markerHashMap[item["Name"].toString()] = mMap.addMarker(MarkerOptions()
                         .position(latlng)
                         .title(name)
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))!!
-
                     markerHashMap[item["Name"].toString()]!!.showInfoWindow()
-
-
-/*
-                    latlng?.let {
-                        MarkerOptions().position(
-                            it
-                        ).title("Marker in Sydney")
-                    }?.let { mMap.addMarker(it) }!!
-*/
                 }
-
-
-
             }.addOnFailureListener(OnFailureListener { e ->
                     Log.i("Error", e.toString())
             })
-
-        /*
-        database.collection("landmarks").addSnapshotListener(object : EventListener<QuerySnapshot> {
-            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                if (error != null) {
-                    Log.i("Firebase Error", error.message.toString())
-                    return
-                }
-                for (dc : DocumentChange in value?.documentChanges!!) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-
-
-                    }
-                }
-            }
-
-        })
-
-         */
-
-
-
     }
 
-
-    //direct the view to CoFo
     private fun toCardiff() {
-        //co-ordinates for CoFo (pull out of Google Maps URL or right click the point)
         val cardiff = LatLng(51.48275351945997, -3.1688197915140925)
-        //mMap.addMarker(MarkerOptions().position(coFo)
-        //    .title("Welcome to Cardiff"))
-        //map appears as though under a `camera'
         mMap.moveCamera(CameraUpdateFactory.zoomTo(12F))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(cardiff))
-        //zoom level from 1--20 as float
-
     }
 
     override fun onAttach(context: Context) {
@@ -319,5 +250,10 @@ class MapFragment : Fragment() {
             getLastLocation()
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
+    }
+
+    private fun displayMessage(view: View, msgText : String) {
+        val sb = Snackbar.make(view, msgText, Snackbar.LENGTH_SHORT)
+        sb.show()
     }
 }
