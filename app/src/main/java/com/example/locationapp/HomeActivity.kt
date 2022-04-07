@@ -18,8 +18,6 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var mMap : GoogleMap
 
-    //private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)

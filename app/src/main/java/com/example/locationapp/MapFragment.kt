@@ -108,7 +108,7 @@ class MapFragment : Fragment() {
                         .position(latlng)
                         .title(name)
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))!!
-                    markerHashMap[item["Name"].toString()]!!.showInfoWindow()
+                    //markerHashMap[item["Name"].toString()]!!.showInfoWindow()
                 }
             }.addOnFailureListener(OnFailureListener { e ->
                     Log.i("Error", e.toString())

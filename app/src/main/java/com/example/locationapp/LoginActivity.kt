@@ -67,8 +67,10 @@ class LoginActivity : AppCompatActivity() {
 
         if (txtEmail.text.toString() == "") {
             txtGreeting.text = "Error : Please input a valid email address"
+            btnLogin.isEnabled = true
         } else if (txtPassword.text.toString() == "") {
             txtGreeting.text = "Error : Please input a valid password"
+            btnLogin.isEnabled = true
         } else {
 
             //Check credentials
@@ -83,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         closeKeyboard()
                         txtGreeting.text = "Error : Incorrect username or password"
+                        btnLogin.isEnabled = true
                     }
                 }
         }
