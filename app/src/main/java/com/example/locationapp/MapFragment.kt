@@ -73,8 +73,9 @@ class MapFragment : Fragment() {
         mMap.setOnInfoWindowClickListener {
 
            if (it.title == "Hidden Landmark") {
-               //Log.i("Landmark Clicked " , "This landmark is hidden")
-               displayMessage(requireView(), "This landmark is hidden")
+               displayMessage(requireView(), "This landmark is hidden. Visit in person to discover it!")
+           } else if (it.title == "You are here!") {
+               displayMessage(requireView(), "Your current location")
            } else {
                val newIntent = Intent(requireActivity(), LandmarkActivity::class.java)
                newIntent.putExtra("landmark_id", it.title.toString())
@@ -108,6 +109,7 @@ class MapFragment : Fragment() {
                         .position(latlng)
                         .title(name)
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))!!
+
                     //markerHashMap[item["Name"].toString()]!!.showInfoWindow()
                 }
             }.addOnFailureListener(OnFailureListener { e ->
@@ -166,7 +168,7 @@ class MapFragment : Fragment() {
 
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(15F))
                     mMap.addMarker(MarkerOptions().position(lastLoc)
-                        .title("Current Location")
+                        .title("You are here!")
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))
                 }
             }

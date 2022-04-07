@@ -22,10 +22,6 @@ class LocationsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //recyclerView = findViewById(R.id.rcvLandmarks)
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,6 +30,10 @@ class LocationsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
         recyclerView = view.findViewById(R.id.rcvLandmarks)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
+
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         locationArrayList = arrayListOf()
 

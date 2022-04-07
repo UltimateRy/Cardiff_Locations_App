@@ -5,11 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".LocationsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvLandmarks"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvLandmarks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>
 

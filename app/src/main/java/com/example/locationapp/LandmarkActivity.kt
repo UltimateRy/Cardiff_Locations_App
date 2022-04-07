@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
@@ -15,17 +16,26 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.locationapp.databinding.ActivityLandmarkBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import org.w3c.dom.Text
 import java.io.File
+import java.util.*
 
-class LandmarkActivity : AppCompatActivity() {
+class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var txtTitle : TextView
+    private lateinit var txtDescription : TextView
+    private lateinit var btnSpeak : FloatingActionButton
+
     private lateinit var cbxVisited : CheckBox
     private lateinit var cbxFavourited : CheckBox
+
+    private var tts: TextToSpeech? = null
 
     lateinit var binding : ActivityLandmarkBinding
 
@@ -34,44 +44,44 @@ class LandmarkActivity : AppCompatActivity() {
         binding = ActivityLandmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
         txtTitle = findViewById<TextView>(R.id.txtTitle)
+        txtDescription = findViewById<TextView>(R.id.txtDescription)
+        btnSpeak = findViewById<FloatingActionButton>(R.id.btnSpeak)
+
+        tts = TextToSpeech(this, this)
 
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_toolbar)
         setSupportActionBar(myToolbar)
 
-
         var locationId = intent.getStringExtra("landmark_id")
-
         txtTitle.text = locationId!!.uppercase()
 
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+        Firebase.firestore.collection("landmarks").whereEqualTo("Name", locationId)
+            .get().addOnCompleteListener { task ->
+                val document = task.result
 
+                for (item in document) {
+                    txtDescription.text = item.getString("Description")
+                }
+            }
 
         val storageRef = FirebaseStorage.getInstance().reference.child("images/$locationId.jpg")
-
         val localfile = File.createTempFile("tempImage", "jpg")
 
         storageRef.getFile(localfile).addOnSuccessListener {
-
-            if (progressDialog.isShowing) {
-                progressDialog.dismiss()
-            }
-
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             binding.imageView.setImageBitmap(bitmap)
-
         }.addOnFailureListener{
-
             Log.e("Image View : ", "Failed to get image")
-
-            if (progressDialog.isShowing) {
-                progressDialog.dismiss()
-            }
-
             finish()
         }
+
+        btnSpeak.setOnClickListener() { view ->
+
+            tts!!.speak(txtDescription.text.toString(), TextToSpeech.QUEUE_FLUSH, null, "")
+            Log.i("Speech started : ", "Speaking now")
+
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -115,6 +125,33 @@ class LandmarkActivity : AppCompatActivity() {
 
         cbxVisited = findViewById<CheckBox>(R.id.cbxVisited)
         cbxFavourited = findViewById<CheckBox>(R.id.cbxFavourited)
+
+    }
+
+    override fun onInit(status: Int) {
+
+        if (status == TextToSpeech.SUCCESS) {
+
+            val result = tts!!.setLanguage(Locale.UK)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS" , "The language is not supported")
+            }
+
+        } else {
+            Log.e("TTS" , "Initialisation Failed")
+        }
+
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+
+        if (tts != null) {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+
 
     }
 }
