@@ -4,12 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <item
-        android:id="@+id/action_refresh"
-        android:title="Refresh"
-        android:icon="@drawable/ic_refresh"
-        app:showAsAction="ifRoom"
-        ></item>
+
 
     <item
         android:id="@+id/action_profile"

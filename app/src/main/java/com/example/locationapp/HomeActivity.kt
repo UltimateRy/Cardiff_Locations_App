@@ -57,11 +57,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val myView = findViewById<View>(R.id.main_toolbar)
         when (item.itemId) {
-            R.id.action_refresh -> {
-                val sb = Snackbar.make(myView, "Refresh button clicked", Snackbar.LENGTH_LONG)
-                sb.show()
-                return true
-            }
             R.id.action_logout -> {
                 val sb = Snackbar.make(myView, "Logout button clicked", Snackbar.LENGTH_LONG)
                 sb.show()
