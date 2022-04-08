@@ -84,7 +84,6 @@ class LocationsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
             })
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

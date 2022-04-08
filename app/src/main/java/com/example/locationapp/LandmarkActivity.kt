@@ -47,6 +47,9 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         txtDescription = findViewById<TextView>(R.id.txtDescription)
         btnSpeak = findViewById<FloatingActionButton>(R.id.btnSpeak)
 
+        cbxVisited = findViewById<CheckBox>(R.id.cbxVisited)
+        cbxFavourited = findViewById<CheckBox>(R.id.cbxFavourited)
+
         tts = TextToSpeech(this, this)
 
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_toolbar)
@@ -58,10 +61,37 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         Firebase.firestore.collection("landmarks").whereEqualTo("Name", locationId)
             .get().addOnCompleteListener { task ->
                 val document = task.result
+                for (item in document) {
+                    txtDescription.text = item.getString("Description")
+                }
+
+                Firebase.firestore.collection("favourites")
+                    .whereEqualTo("LandmarkName", locationId)
+                    .whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
+                    .get().addOnCompleteListener { favouritesTask ->
+                        val favourites = favouritesTask.result
+                        if (favourites.count() > 0) {
+                            cbxFavourited.isChecked = true
+                        }
+                    }
+            }
+
+        Firebase.firestore.collection("landmarks").whereEqualTo("Name", locationId)
+            .get().addOnCompleteListener { task ->
+                val document = task.result
 
                 for (item in document) {
                     txtDescription.text = item.getString("Description")
                 }
+                Firebase.firestore.collection("visited")
+                    .whereEqualTo("LandmarkName", locationId)
+                    .whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
+                    .get().addOnCompleteListener { favouritesTask ->
+                        val favourites = favouritesTask.result
+                        if (favourites.count() > 0) {
+                            cbxVisited.isChecked = true
+                        }
+                    }
             }
 
         val storageRef = FirebaseStorage.getInstance().reference.child("images/$locationId.jpg")
@@ -75,11 +105,75 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             finish()
         }
 
-        btnSpeak.setOnClickListener() { view ->
+        cbxFavourited.setOnClickListener() {
+            setFavourited()
+        }
 
+        cbxVisited.setOnClickListener() {
+            setVisited()
+        }
+
+        btnSpeak.setOnClickListener() { view ->
             tts!!.speak(txtDescription.text.toString(), TextToSpeech.QUEUE_FLUSH, null, "")
             Log.i("Speech started : ", "Speaking now")
+        }
+    }
 
+    fun setFavourited() {
+
+        if (cbxFavourited.isChecked) {
+
+            val favourite = hashMapOf(
+                "UserEmail" to FirebaseAuth.getInstance().currentUser!!.email.toString(),
+                "LandmarkName" to intent.getStringExtra("landmark_id")
+            )
+
+            Firebase.firestore.collection("favourites").document().set(favourite)
+                .addOnSuccessListener() {
+                    Log.i("Add favourite", "success")
+                }.addOnFailureListener() {
+                    Log.e("Add favourite", "failure")
+                }
+
+        } else {
+
+            Firebase.firestore.collection("favourites")
+                .whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
+                .whereEqualTo("LandmarkName", intent.getStringExtra("landmark_id")
+                ).get().addOnSuccessListener { collection ->
+                    for (item in collection) {
+                        Firebase.firestore.collection("favourites").document(item.id).delete()
+                    }
+                }
+        }
+    }
+
+    fun setVisited() {
+
+        if (cbxVisited.isChecked) {
+
+            val favourite = hashMapOf(
+                "UserEmail" to FirebaseAuth.getInstance().currentUser!!.email.toString(),
+                "LandmarkName" to intent.getStringExtra("landmark_id")
+            )
+
+            Firebase.firestore.collection("visited").document().set(favourite)
+                .addOnSuccessListener() {
+                    Log.i("Add visit", "success")
+                }.addOnFailureListener() {
+                    Log.e("Add visit", "failure")
+                }
+
+        } else {
+
+            Firebase.firestore.collection("visited")
+                .whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
+                .whereEqualTo("LandmarkName", intent.getStringExtra("landmark_id")
+                ).get().addOnSuccessListener { collection ->
+                    for (item in collection) {
+                        Firebase.firestore.collection("visited").document(item.id).delete()
+                    }
+                }
         }
 
     }

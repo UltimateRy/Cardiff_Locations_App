@@ -15,6 +15,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import org.w3c.dom.Text
 
 
@@ -24,6 +26,8 @@ class RegisterActivity : AppCompatActivity() {
     private var currentUser = mAuth.currentUser
 
     lateinit var btnRegister : Button
+    lateinit var txtFirstname : EditText
+    lateinit var txtSurname : EditText
     lateinit var txtEmail : EditText
     lateinit var txtPassword : EditText
     lateinit var txtGreeting : TextView
@@ -34,6 +38,8 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         btnRegister = findViewById<Button>(R.id.btnRegister)
+        txtFirstname = findViewById<TextInputEditText>(R.id.textInputEditFirstname)
+        txtSurname = findViewById<TextInputEditText>(R.id.textInputEditSurname)
         txtEmail = findViewById<TextInputEditText>(R.id.textInputEditEmailRegister)
         txtPassword = findViewById<TextInputEditText>(R.id.textInputEditPasswordRegister)
         txtGreeting = findViewById<TextView>(R.id.txtGreetingRegister)
@@ -71,6 +77,15 @@ class RegisterActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
 
                                 val firebaseUser : FirebaseUser = task.result!!.user!!
+
+                                val user = hashMapOf(
+                                    "EmailAddress" to firebaseUser.email.toString(),
+                                    "FirstName" to txtFirstname.text.toString(),
+                                    "Surname" to txtSurname.text.toString(),
+                                    "IsAdmin" to false
+                                )
+
+                                Firebase.firestore.collection("users").document().set(user)
 
                                 val intent =
                                     Intent(this, HomeActivity::class.java)
