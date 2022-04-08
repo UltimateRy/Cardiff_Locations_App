@@ -58,6 +58,9 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         var locationId = intent.getStringExtra("landmark_id")
         txtTitle.text = locationId!!.uppercase()
 
+        //This set of firebase manipulation is finding the landmark and checking if it has been favourited by the user
+        //If if has then we know to check the checkbox
+
         Firebase.firestore.collection("landmarks").whereEqualTo("Name", locationId)
             .get().addOnCompleteListener { task ->
                 val document = task.result
@@ -76,6 +79,7 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
             }
 
+        //Same again this time for visited landmarks
         Firebase.firestore.collection("landmarks").whereEqualTo("Name", locationId)
             .get().addOnCompleteListener { task ->
                 val document = task.result
@@ -94,6 +98,8 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
             }
 
+
+        //Adding an image for the location
         val storageRef = FirebaseStorage.getInstance().reference.child("images/$locationId.jpg")
         val localfile = File.createTempFile("tempImage", "jpg")
 
@@ -167,6 +173,7 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    //Implementing the additional required nav bar functions
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_layout, menu)
         return super.onCreateOptionsMenu(menu)

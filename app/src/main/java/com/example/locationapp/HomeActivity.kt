@@ -22,11 +22,10 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        //val userId = intent.getStringExtra("user_id")
-        //val emailId = intent.getStringExtra("email_id")
-
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.main_toolbar)
         setSupportActionBar(myToolbar)
+
+        //Setting up a view pager to work with a tabLayout properly
 
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         val viewPager = findViewById<ViewPager2>(R.id.pager)

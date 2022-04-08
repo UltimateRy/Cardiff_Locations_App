@@ -8,6 +8,12 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="greetingError">Error: Please ensure you have entered a valid email and password</string>
+    <string name="enterPass">Please enter a password</string>
+    <string name="enterEmail">Please enter an email address</string>
+    <string name="validEmail">Error : Please input a valid email address</string>
+    <string name="validPass">Error : Please input a valid password</string>
+    <string name="badCredentials">Error : Incorrect username or password</string>
 
 
 </resources>

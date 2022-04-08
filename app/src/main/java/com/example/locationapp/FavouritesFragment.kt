@@ -28,15 +28,13 @@ class FavouritesFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
 
     override fun onResume() {
         super.onResume()
-
         EventChangeListener()
-        //myAdapter.notifyDataSetChanged()
-        //EventChangeListener()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Preparing the recycler view for populating
 
         recyclerView = view.findViewById(R.id.rcvLandmarksFav)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -67,6 +65,7 @@ class FavouritesFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
 
     private fun EventChangeListener() {
         locationArrayList.clear()
+        //This is getting the favourite locations of the particular user that is logged in
         db = FirebaseFirestore.getInstance()
         db.collection("favourites").whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
             .get().addOnCompleteListener { task ->

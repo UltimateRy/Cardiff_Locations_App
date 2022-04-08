@@ -18,7 +18,6 @@ class RecyclerViewAdapter(private val locationList : ArrayList<Location>,
     private val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewAdapter.MyViewHolder {
-
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
         return MyViewHolder(itemView)
     }
@@ -26,33 +25,16 @@ class RecyclerViewAdapter(private val locationList : ArrayList<Location>,
     override fun onBindViewHolder(holder: RecyclerViewAdapter.MyViewHolder, position: Int) {
         val location : Location = locationList[position]
         holder.name.text = location.Name
-
         val locName = location.Name
-
-
-
         val storageRef = FirebaseStorage.getInstance().reference.child("images/$locName.jpg")
-
-        //Log.e("Image : ", storageRef)
-
         val localfile = File.createTempFile("tempImage", "jpg")
 
-
-        //Glide.with(holder.itemView)
-        //    .load(storageRef.getFile(localfile))
-        //    .into(holder.img)
-
-
         storageRef.getFile(localfile).addOnSuccessListener {
-
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             holder.img.setImageBitmap(bitmap)
-
         }.addOnFailureListener{
-
             Log.e("Image View : ", "Failed to get image")
         }
-
     }
 
     override fun getItemCount(): Int {

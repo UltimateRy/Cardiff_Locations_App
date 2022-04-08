@@ -27,6 +27,8 @@ class LocationsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Preparing the recyclerview for population
+
         recyclerView = view.findViewById(R.id.rcvLandmarks)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)

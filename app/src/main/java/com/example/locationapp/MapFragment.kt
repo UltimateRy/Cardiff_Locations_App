@@ -44,24 +44,8 @@ class MapFragment : Fragment() {
     private var database = Firebase.firestore
 
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-
-         */
 
         googleMap.uiSettings.isZoomControlsEnabled = true
-
-        /**
-        val sydney = LatLng(-34.0, 151.0)
-        markerHashMap["Sydney"] = googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))!!
-        **/
-
         mMap = googleMap
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json))
 
@@ -70,8 +54,8 @@ class MapFragment : Fragment() {
             false
         }
 
+        //Adding mesage for hidden landmarks, or adding activities to non-hidden ones
         mMap.setOnInfoWindowClickListener {
-
            if (it.title == "Hidden Landmark") {
                displayMessage(requireView(), "This landmark is hidden. Visit in person to discover it!")
            } else if (it.title == "You are here!") {
@@ -109,8 +93,6 @@ class MapFragment : Fragment() {
                         .position(latlng)
                         .title(name)
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))!!
-
-                    //markerHashMap[item["Name"].toString()]!!.showInfoWindow()
                 }
             }.addOnFailureListener(OnFailureListener { e ->
                     Log.i("Error", e.toString())
@@ -134,24 +116,20 @@ class MapFragment : Fragment() {
 
     private fun getLastLocation() {
         if (isLocationEnabled()) {
-            // checking location permission
             if (ActivityCompat.checkSelfPermission(
                     requireActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // request permission
                 ActivityCompat.requestPermissions(
                     requireActivity(),
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 42
                 );
                 return
             }
-            //once the last location is acquired
             mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                 val location: Location? = task.result
                 if (location == null) {
-                    //if it couldn't be acquired, get some new location data
                     requestNewLocationData()
                 } else {
                     val lat = location.latitude
@@ -160,7 +138,6 @@ class MapFragment : Fragment() {
                     Log.i("LocLatLocation", "$lat and $long")
                     val lastLoc = LatLng(lat, long)
 
-                    //update camera
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(lastLoc))
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc))
 
@@ -182,29 +159,24 @@ class MapFragment : Fragment() {
     }
 
     private fun requestNewLocationData() {
-        //parameters for location
         val mLocationRequest = LocationRequest.create().apply {
             interval = 100
             fastestInterval = 50
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             maxWaitTime= 100
         }
-        // checking location permission
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // request permission
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 42
             );
             return
         }
-        //update the location client
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        //add a callback so that location is repeatedly updated according to parameters
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
             Looper.myLooper()!!
@@ -241,9 +213,7 @@ class MapFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
 
         view.findViewById<FloatingActionButton>(R.id.locFab).setOnClickListener() {
-            //markerHashMap["Sydney"]?.remove()
             getLastLocation()
-            //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
     }
 

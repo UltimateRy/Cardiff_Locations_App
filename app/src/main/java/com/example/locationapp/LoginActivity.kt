@@ -66,14 +66,14 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.isEnabled = false
 
         if (txtEmail.text.toString() == "") {
-            txtGreeting.text = "Error : Please input a valid email address"
+            txtGreeting.text = getString(R.string.validEmail)
             btnLogin.isEnabled = true
         } else if (txtPassword.text.toString() == "") {
-            txtGreeting.text = "Error : Please input a valid password"
+            txtGreeting.text = getString(R.string.validPass)
             btnLogin.isEnabled = true
         } else {
 
-            //Check credentials
+            //Checking if the user can sign in
             mAuth.signInWithEmailAndPassword(
                 txtEmail.text.toString(),
                 txtPassword.text.toString()
@@ -84,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
                         closeKeyboard()
                     } else {
                         closeKeyboard()
-                        txtGreeting.text = "Error : Incorrect username or password"
+                        txtGreeting.text = getString(R.string.badCredentials)
                         btnLogin.isEnabled = true
                     }
                 }

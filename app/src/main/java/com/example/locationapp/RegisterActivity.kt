@@ -60,33 +60,26 @@ class RegisterActivity : AppCompatActivity() {
     private fun register() {
         when {
             TextUtils.isEmpty(txtEmail.text.toString().trim { it <= ' ' }) -> {
-                txtGreeting.text = "Please enter an email address"
+                txtGreeting.text = getString(R.string.enterEmail)
             }
-
             TextUtils.isEmpty(txtPassword.text.toString().trim { it <= ' ' }) -> {
-                txtGreeting.text = "Please enter a password"
+                txtGreeting.text = getString(R.string.enterPass)
             }
             else -> {
                 val email: String = txtEmail.text.toString().trim { it <= ' '}
                 val password : String = txtPassword.text.toString().trim {it <= ' '}
-
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(
                         OnCompleteListener<AuthResult> { task ->
-
                             if (task.isSuccessful) {
-
                                 val firebaseUser : FirebaseUser = task.result!!.user!!
-
                                 val user = hashMapOf(
                                     "EmailAddress" to firebaseUser.email.toString(),
                                     "FirstName" to txtFirstname.text.toString(),
                                     "Surname" to txtSurname.text.toString(),
                                     "IsAdmin" to false
                                 )
-
                                 Firebase.firestore.collection("users").document().set(user)
-
                                 val intent =
                                     Intent(this, HomeActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -94,19 +87,14 @@ class RegisterActivity : AppCompatActivity() {
                                 intent.putExtra("email_id", email)
                                 startActivity(intent)
                                 finish()
-
                             } else {
-                                txtGreeting.text = "Error: Please ensure you have entered a valid email and password"
+                                txtGreeting.text = getString(R.string.greetingError)
                             }
                         }
                     )
             }
         }
-
-
-
     }
-
     private fun displayMessage(view: View, msgText : String) {
         val sb = Snackbar.make(view, msgText, Snackbar.LENGTH_SHORT)
         sb.show()

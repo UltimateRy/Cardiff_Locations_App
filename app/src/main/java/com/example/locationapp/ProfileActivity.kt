@@ -38,9 +38,6 @@ class ProfileActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickList
         var firstName : String = ""
         var lastName : String = ""
 
-
-
-
         txtEmail.text = FirebaseAuth.getInstance().currentUser!!.email.toString()
 
         Firebase.firestore.collection("users")
@@ -56,25 +53,19 @@ class ProfileActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickList
         recyclerView = this.findViewById(R.id.rcvLandmarksVisited)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         locationArrayList = arrayListOf()
-
         myAdapter = RecyclerViewAdapter(locationArrayList, this)
-
         recyclerView.adapter = myAdapter
-
-        //EventChangeListener()
 
         emailActionButton.setOnClickListener() {
 
             var outputString : String = ""
             for (item in locationArrayList) {
                 outputString += " - " + item.Name + "\n"
-
             }
 
             val newIntent = Intent(Intent.ACTION_SENDTO)
@@ -88,10 +79,10 @@ class ProfileActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickList
 
     override fun onResume() {
         super.onResume()
-
         EventChangeListener()
     }
 
+    //This method will get the landmarks that the user has checked visited to, and update the recyclerview accordingly
     private fun EventChangeListener() {
         locationArrayList.clear()
         db = FirebaseFirestore.getInstance()
@@ -123,16 +114,11 @@ class ProfileActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickList
     }
 
     override fun onItemClick(position: Int) {
-        //displayMessage(requireView(), "Item $position was clicked")
         val clickedItem : Location = locationArrayList[position]
-        //clickedItem.Name = "Clicked"
-
         val newIntent = Intent(this, LandmarkActivity::class.java)
         newIntent.putExtra("landmark_id", clickedItem.Name.toString())
         startActivity(newIntent)
         false
-
         myAdapter.notifyItemChanged(position)
-
     }
 }
