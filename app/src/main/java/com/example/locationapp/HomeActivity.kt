@@ -71,14 +71,6 @@ class HomeActivity : AppCompatActivity() {
                 val newIntent = Intent(this, ProfileActivity::class.java)
                 startActivity(newIntent)
             }
-            R.id.action_about -> {
-                val newIntent = Intent(this, AboutActivity::class.java)
-                startActivity(newIntent)
-            }
-            R.id.action_settings -> {
-                val newIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(newIntent)
-            }
         }
         return super.onOptionsItemSelected(item)
     }

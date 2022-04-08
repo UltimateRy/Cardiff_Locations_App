@@ -172,13 +172,6 @@ class MapFragment : Fragment() {
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)))
                 }
             }
-            //couldn't get location, so go to Settings (deprecated??)
-        } else {
-            val mRootView = requireActivity().findViewById<View>(R.id.map)
-            val locSnack = Snackbar.make(mRootView, "R.string.location_switch", Snackbar.LENGTH_LONG)
-            locSnack.show()
-            val intent = Intent(requireActivity(), SettingsActivity::class.java)
-            startActivity(intent)
         }
     }
 

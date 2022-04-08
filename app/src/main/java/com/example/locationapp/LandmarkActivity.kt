@@ -120,23 +120,18 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     fun setFavourited() {
-
         if (cbxFavourited.isChecked) {
-
             val favourite = hashMapOf(
                 "UserEmail" to FirebaseAuth.getInstance().currentUser!!.email.toString(),
                 "LandmarkName" to intent.getStringExtra("landmark_id")
             )
-
             Firebase.firestore.collection("favourites").document().set(favourite)
                 .addOnSuccessListener() {
                     Log.i("Add favourite", "success")
                 }.addOnFailureListener() {
                     Log.e("Add favourite", "failure")
                 }
-
         } else {
-
             Firebase.firestore.collection("favourites")
                 .whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
                 .whereEqualTo("LandmarkName", intent.getStringExtra("landmark_id")
@@ -149,23 +144,18 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     fun setVisited() {
-
         if (cbxVisited.isChecked) {
-
             val favourite = hashMapOf(
                 "UserEmail" to FirebaseAuth.getInstance().currentUser!!.email.toString(),
                 "LandmarkName" to intent.getStringExtra("landmark_id")
             )
-
             Firebase.firestore.collection("visited").document().set(favourite)
                 .addOnSuccessListener() {
                     Log.i("Add visit", "success")
                 }.addOnFailureListener() {
                     Log.e("Add visit", "failure")
                 }
-
         } else {
-
             Firebase.firestore.collection("visited")
                 .whereEqualTo("UserEmail", FirebaseAuth.getInstance().currentUser!!.email.toString())
                 .whereEqualTo("LandmarkName", intent.getStringExtra("landmark_id")
@@ -175,7 +165,6 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
                 }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -189,7 +178,6 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             R.id.action_logout -> {
                 val sb = Snackbar.make(myView, "Logout button clicked", Snackbar.LENGTH_LONG)
                 sb.show()
-
                 var mAuth = FirebaseAuth.getInstance()
                 mAuth.signOut()
 
@@ -202,50 +190,32 @@ class LandmarkActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 val newIntent = Intent(this, ProfileActivity::class.java)
                 startActivity(newIntent)
             }
-            R.id.action_about -> {
-                val newIntent = Intent(this, AboutActivity::class.java)
-                startActivity(newIntent)
-            }
-            R.id.action_settings -> {
-                val newIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(newIntent)
-            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return super.onCreateView(name, context, attrs)
-
         cbxVisited = findViewById<CheckBox>(R.id.cbxVisited)
         cbxFavourited = findViewById<CheckBox>(R.id.cbxFavourited)
-
     }
 
     override fun onInit(status: Int) {
-
         if (status == TextToSpeech.SUCCESS) {
-
             val result = tts!!.setLanguage(Locale.UK)
-
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS" , "The language is not supported")
             }
-
         } else {
             Log.e("TTS" , "Initialisation Failed")
         }
-
     }
 
     public override fun onDestroy() {
         super.onDestroy()
-
         if (tts != null) {
             tts!!.stop()
             tts!!.shutdown()
         }
-
-
     }
 }

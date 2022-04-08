@@ -67,7 +67,7 @@ class ProfileActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickList
 
         recyclerView.adapter = myAdapter
 
-        EventChangeListener()
+        //EventChangeListener()
 
         emailActionButton.setOnClickListener() {
 
@@ -84,6 +84,12 @@ class ProfileActivity : AppCompatActivity(), RecyclerViewAdapter.OnItemClickList
 
             startActivity(Intent.createChooser(newIntent, "Send Email"))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        EventChangeListener()
     }
 
     private fun EventChangeListener() {
